@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class ContractSeeder extends Seeder
 {
@@ -15,7 +14,7 @@ class ContractSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
-        
+
         // Retrieve existing user and organization IDs
         $userIds = DB::table('users')->pluck('id')->toArray();
         $organizationIds = DB::table('organizations')->pluck('id')->toArray();
@@ -23,6 +22,7 @@ class ContractSeeder extends Seeder
         if (empty($userIds) || empty($organizationIds)) {
             // Handle the case where no users or organizations exist
             $this->command->error('No users or organizations found. Please seed users and organizations first.');
+
             return;
         }
 
@@ -34,5 +34,6 @@ class ContractSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }    }
+        }
+    }
 }

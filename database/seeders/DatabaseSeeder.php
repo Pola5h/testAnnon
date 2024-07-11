@@ -19,7 +19,6 @@ class DatabaseSeeder extends Seeder
             ContractSeeder::class,
         ]);
 
-
         // User::factory(10)->create();
 
         // User::factory()->create([
