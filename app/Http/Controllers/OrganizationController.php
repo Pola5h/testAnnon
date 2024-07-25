@@ -3,10 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Organization;
+use App\Services\OrganizationService;
 use Illuminate\Http\Request;
 
 class OrganizationController extends Controller
 {
+    protected $organizationService;
+
+    public function __construct(OrganizationService $organizationService)
+    {
+        $this->organizationService = $organizationService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -26,13 +34,20 @@ class OrganizationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'name' => 'required|string|max:255',
+    //     ]);
+
+    //     return Organization::create($validated);
+    // }
+
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
+        $organization = $this->organizationService->validateAndCreate($request->all());
 
-        return Organization::create($validated);
+        return response()->json($organization, 201);
     }
 
     /**
@@ -56,17 +71,26 @@ class OrganizationController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // public function update(Request $request, string $id)
+    // {
+    //     $organization = Organization::findOrFail($id);
+
+    //     $validated = $request->validate([
+    //         'name' => 'sometimes|required|string|max:255',
+    //     ]);
+
+    //     $organization->update($validated);
+
+    //     return $organization;
+    // }
+
     public function update(Request $request, string $id)
     {
         $organization = Organization::findOrFail($id);
 
-        $validated = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-        ]);
+        $updatedOrganization = $this->organizationService->validateAndUpdate($request->all(), $organization);
 
-        $organization->update($validated);
-
-        return $organization;
+        return response()->json($updatedOrganization);
     }
 
     /**

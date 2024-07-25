@@ -4,9 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Services\UserService;
 
 class UserController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -27,17 +35,24 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'name' => 'required|string|max:255',
+    //         'email' => 'required|string|email|max:255|unique:users',
+    //         'password' => 'required|string|min:8',
+    //     ]);
+
+    //     $validated['password'] = bcrypt($validated['password']);
+
+    //     return User::create($validated);
+    // }
+
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-        ]);
+        $user = $this->userService->validateAndCreate($request->all());
 
-        $validated['password'] = bcrypt($validated['password']);
-
-        return User::create($validated);
+        return response()->json($user, 201);
     }
 
     /**
@@ -62,24 +77,33 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // public function update(Request $request, string $id)
+    // {
+
+    //     $user = User::findOrFail($id);
+
+    //     $validated = $request->validate([
+    //         'name' => 'sometimes|required|string|max:255',
+    //         'email' => 'sometimes|required|string|email|max:255|unique:users,email,'.$user->id,
+    //         'password' => 'sometimes|required|string|min:8',
+    //     ]);
+
+    //     if ($request->filled('password')) {
+    //         $validated['password'] = bcrypt($validated['password']);
+    //     }
+
+    //     $user->update($validated);
+
+    //     return $user;
+    // }
+
     public function update(Request $request, string $id)
     {
-
         $user = User::findOrFail($id);
 
-        $validated = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'email' => 'sometimes|required|string|email|max:255|unique:users,email,'.$user->id,
-            'password' => 'sometimes|required|string|min:8',
-        ]);
+        $updatedUser = $this->userService->validateAndUpdate($request->all(), $user);
 
-        if ($request->filled('password')) {
-            $validated['password'] = bcrypt($validated['password']);
-        }
-
-        $user->update($validated);
-
-        return $user;
+        return response()->json($updatedUser);
     }
 
     /**
