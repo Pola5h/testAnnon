@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\Services\UserService;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -51,6 +51,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $user = $this->userService->validateAndCreate($request->all());
+
+        \App\Jobs\SendWelcomeEmail::dispatch($user);
 
         return response()->json($user, 201);
     }

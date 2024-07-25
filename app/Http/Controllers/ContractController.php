@@ -48,6 +48,7 @@ class ContractController extends Controller
     public function store(Request $request)
     {
         $contract = $this->contractService->validateAndCreate($request->all());
+        \App\Jobs\SendContractEmail::dispatch($contract);
 
         return response()->json($contract, 201);
     }
