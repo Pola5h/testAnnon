@@ -16,11 +16,11 @@ class UserService
         //
     }
 
-    protected function rules(User $user = null): array
+    protected function rules(?User $user = null): array
     {
         $uniqueEmailRule = 'unique:users,email';
         if ($user) {
-            $uniqueEmailRule .= ',' . $user->id;
+            $uniqueEmailRule .= ','.$user->id;
         }
 
         return [
@@ -70,5 +70,4 @@ class UserService
 
         return $user;
     }
-
 }

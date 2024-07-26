@@ -23,7 +23,7 @@ class OrganizationService
         ];
 
         if ($isUpdating) {
-            $rules = array_map(fn($rule) => 'sometimes|' . $rule, $rules);
+            $rules = array_map(fn ($rule) => 'sometimes|'.$rule, $rules);
         }
 
         return $rules;
