@@ -22,4 +22,14 @@ class Contract extends Model
     {
         return $this->belongsTo(Organization::class);
     }
+
+    public function reportingManager()
+    {
+        return $this->belongsTo(User::class, 'reporting_manager_id');
+    }
+
+    public function subordinates()
+    {
+        return $this->hasMany(self::class, 'reporting_manager_id');
+    }
 }

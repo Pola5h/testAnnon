@@ -22,6 +22,7 @@ class ContractService
             'user_id' => 'required|exists:users,id',
             'organization_id' => 'required|exists:organizations,id',
             'contract_details' => 'required|string',
+            'reporting_manager_id' => 'nullable|exists:users,id',
         ];
 
         if ($isUpdating) {
