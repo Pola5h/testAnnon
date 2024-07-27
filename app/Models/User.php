@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -45,7 +45,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function contracts()
+    public function contracts(): HasMany
     {
         return $this->hasMany(Contract::class);
     }

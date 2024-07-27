@@ -29,7 +29,7 @@ class OrganizationService
         return $rules;
     }
 
-    public function validateAndCreate(array $data)
+    public function validateAndCreate(array $data): Organization
     {
         $validator = Validator::make($data, $this->rules());
 
@@ -40,7 +40,7 @@ class OrganizationService
         return Organization::create($validator->validated());
     }
 
-    public function validateAndUpdate(array $data, Organization $organization)
+    public function validateAndUpdate(array $data, Organization $organization): Organization
     {
         $validator = Validator::make($data, $this->rules(true));
 
