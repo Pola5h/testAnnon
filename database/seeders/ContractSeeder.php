@@ -41,7 +41,7 @@ class ContractSeeder extends Seeder
                         $managerUserId = DB::table('contracts')->where('id', $potentialManagerId)->value('user_id');
                     } while ($managerUserId == $userId);
 
-                    $reportingManagerId = $managerUserId; // Correct assignment to reportingManagerId
+                    $reportingManagerId = $managerUserId;
                 }
 
                 // Check if the user exists

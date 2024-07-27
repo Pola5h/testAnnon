@@ -32,7 +32,7 @@ class ContractService
         return $rules;
     }
 
-    public function validateAndCreate(array $data)
+    public function validateAndCreate(array $data): Contract
     {
         $validator = Validator::make($data, $this->rules());
 
@@ -43,7 +43,7 @@ class ContractService
         return Contract::create($validator->validated());
     }
 
-    public function validateAndUpdate(array $data, Contract $contract)
+    public function validateAndUpdate(array $data, Contract $contract): Contract
     {
         $validator = Validator::make($data, $this->rules(true));
 
