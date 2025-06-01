@@ -16,11 +16,22 @@ class OrganizationService
         //
     }
 
-    public function validateAndCreate(array $data)
+    protected function rules(bool $isUpdating = false): array
     {
-        $validator = Validator::make($data, [
+        $rules = [
             'name' => 'required|string|max:255',
-        ]);
+        ];
+
+        if ($isUpdating) {
+            $rules = array_map(fn ($rule) => 'sometimes|'.$rule, $rules);
+        }
+
+        return $rules;
+    }
+
+    public function validateAndCreate(array $data): Organization
+    {
+        $validator = Validator::make($data, $this->rules());
 
         if ($validator->fails()) {
             throw new ValidationException($validator);
@@ -29,11 +40,9 @@ class OrganizationService
         return Organization::create($validator->validated());
     }
 
-    public function validateAndUpdate(array $data, Organization $organization)
+    public function validateAndUpdate(array $data, Organization $organization): Organization
     {
-        $validator = Validator::make($data, [
-            'name' => 'sometimes|required|string|max:255',
-        ]);
+        $validator = Validator::make($data, $this->rules(true));
 
         if ($validator->fails()) {
             throw new ValidationException($validator);

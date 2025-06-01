@@ -16,13 +16,25 @@ class ContractService
         //
     }
 
-    public function validateAndCreate(array $data)
+    protected function rules(bool $isUpdating = false): array
     {
-        $validator = Validator::make($data, [
+        $rules = [
             'user_id' => 'required|exists:users,id',
             'organization_id' => 'required|exists:organizations,id',
             'contract_details' => 'required|string',
-        ]);
+            'reporting_manager_id' => 'nullable|exists:users,id',
+        ];
+
+        if ($isUpdating) {
+            $rules = array_map(fn ($rule) => 'sometimes|'.$rule, $rules);
+        }
+
+        return $rules;
+    }
+
+    public function validateAndCreate(array $data): Contract
+    {
+        $validator = Validator::make($data, $this->rules());
 
         if ($validator->fails()) {
             throw new ValidationException($validator);
@@ -31,13 +43,9 @@ class ContractService
         return Contract::create($validator->validated());
     }
 
-    public function validateAndUpdate(array $data, Contract $contract)
+    public function validateAndUpdate(array $data, Contract $contract): Contract
     {
-        $validator = Validator::make($data, [
-            'user_id' => 'sometimes|required|exists:users,id',
-            'organization_id' => 'sometimes|required|exists:organizations,id',
-            'contract_details' => 'sometimes|required|string',
-        ]);
+        $validator = Validator::make($data, $this->rules(true));
 
         if ($validator->fails()) {
             throw new ValidationException($validator);
