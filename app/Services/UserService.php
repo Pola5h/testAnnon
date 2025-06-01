@@ -39,7 +39,7 @@ class UserService
         }, $rules);
     }
 
-    public function validateAndCreate(array $data)
+    public function validateAndCreate(array $data): User
     {
         $validator = Validator::make($data, $this->rules());
 
@@ -53,7 +53,7 @@ class UserService
         return User::create($validated);
     }
 
-    public function validateAndUpdate(array $data, User $user)
+    public function validateAndUpdate(array $data, User $user): User
     {
         $validator = Validator::make($data, $this->updateRules($user));
 

@@ -22,6 +22,7 @@ class ContractService
             'user_id' => 'required|exists:users,id',
             'organization_id' => 'required|exists:organizations,id',
             'contract_details' => 'required|string',
+            'reporting_manager_id' => 'nullable|exists:users,id',
         ];
 
         if ($isUpdating) {
@@ -31,7 +32,7 @@ class ContractService
         return $rules;
     }
 
-    public function validateAndCreate(array $data)
+    public function validateAndCreate(array $data): Contract
     {
         $validator = Validator::make($data, $this->rules());
 
@@ -42,7 +43,7 @@ class ContractService
         return Contract::create($validator->validated());
     }
 
-    public function validateAndUpdate(array $data, Contract $contract)
+    public function validateAndUpdate(array $data, Contract $contract): Contract
     {
         $validator = Validator::make($data, $this->rules(true));
 
